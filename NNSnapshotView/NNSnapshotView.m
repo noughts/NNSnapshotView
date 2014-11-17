@@ -11,7 +11,7 @@
 @implementation NNSnapshotView{
 	__weak UIView* _targetView;
 	CGRect _targetFrame;
-	__weak CADisplayLink* _displayLink;
+	CADisplayLink* _displayLink;
 	BOOL isCapturing;
 }
 
@@ -23,8 +23,6 @@
 		_targetView = targetView;
 		_targetFrame = targetFrame;
 		_displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(update:)];
-		
-
 	}
 	return self;
 }

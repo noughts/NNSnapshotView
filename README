@@ -1,0 +1,1 @@
+pod "NNSnapshotView", :git => 'https://github.com/noughts/NNSnapshotView.git'

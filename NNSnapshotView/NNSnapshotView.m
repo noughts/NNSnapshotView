@@ -9,15 +9,17 @@
 #import "NNSnapshotView.h"
 
 @implementation NNSnapshotView{
-	UIView* _targetView;
+	__weak UIView* _targetView;
 	CGRect _targetFrame;
-	UIView* _snapshot_view;
 	CADisplayLink* _displayLink;
 	BOOL isCapturing;
 }
 
 -(instancetype)initWithTargetView:(UIView*)targetView targetFrame:(CGRect)targetFrame{
-	if( self = [super init] ){
+	CGRect rect = targetFrame;
+	rect.origin = CGPointMake(0, 0);
+	if( self = [super initWithFrame:rect] ){
+		self.contentMode = UIViewContentModeTopLeft;
 		_targetView = targetView;
 		_targetFrame = targetFrame;
 		_displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(update:)];
@@ -39,28 +41,35 @@
 	if( isCapturing ){
 		return;
 	}
-//	[_snapshot_view removeFromSuperview];
-//	_snapshot_view = [_targetView resizableSnapshotViewFromRect:_targetFrame afterScreenUpdates:NO withCapInsets:UIEdgeInsetsZero];// afterScreenUpdatesをYESにするとglitchが発生するので注意
 	
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 		isCapturing = YES;
-		UIImage* img = [NNSnapshotView screenCapture:_targetView];
-//		_snapshot_view = [_targetView snapshotViewAfterScreenUpdates:NO];
+		UIImage* img = [self screenCapture];
 		dispatch_async(dispatch_get_main_queue(), ^{
-//			[self addSubview:_snapshot_view];
-			self.image = img;
+			if( img ){
+				self.image = img;
+			}
 			isCapturing = NO;
 		});
 	});
 }
 
 
-+ (UIImage *)screenCapture:(UIView *)view {
+-(UIImage *)screenCapture {
 	UIImage *capture;
-	UIGraphicsBeginImageContextWithOptions(view.frame.size , NO , 2 );
-	[view drawViewHierarchyInRect:view.bounds afterScreenUpdates:NO];
-	capture = UIGraphicsGetImageFromCurrentImageContext();
-	UIGraphicsEndImageContext();
+	@try {
+		UIGraphicsBeginImageContextWithOptions(_targetFrame.size, NO, [UIScreen mainScreen].scale);
+		CGRect rect = _targetView.frame;
+		rect.origin = _targetFrame.origin;
+		[_targetView drawViewHierarchyInRect:rect afterScreenUpdates:NO];// afterScreenUpdatesをYESにするとglitchが発生するので注意
+		capture = UIGraphicsGetImageFromCurrentImageContext();
+	}
+	@catch (NSException *exception) {
+		NSLog( @"NNSnapshotView: %@", exception );
+	}
+	@finally {
+		UIGraphicsEndImageContext();
+	}
 	return capture;
 }
 

@@ -9,11 +9,10 @@
 #import "ViewController.h"
 #import "NNSnapshotView.h"
 
-@interface ViewController ()
 
-@end
-
-@implementation ViewController
+@implementation ViewController{
+	NNSnapshotView* _snapshot_view;
+}
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
@@ -26,15 +25,24 @@
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
 	if( [segue.identifier isEqualToString:@"embed"] ){
 		UIViewController* vc = segue.destinationViewController;
-		NNSnapshotView* snapshot = [[NNSnapshotView alloc] initWithTargetView:vc.view targetFrame:CGRectMake(0, 0, 320, 200)];
-		snapshot.center = CGPointMake(50, 50);
-		[self.view addSubview:snapshot];
+		_snapshot_view = [[NNSnapshotView alloc] initWithTargetView:vc.view targetFrame:CGRectMake(20, 20, 200, 200)];
+		[self.view addSubview:_snapshot_view];
 		
 //		NNSnapshotView* snapshot2 = [[NNSnapshotView alloc] initWithTargetView:vc.view targetFrame:CGRectMake(0, 100, 320, 200)];
-//		snapshot2.center = CGPointMake(-10, 100);
+//		snapshot2.center = CGPointMake(200, 200);
 //		[self.view addSubview:snapshot2];
 	}
 }
+
+
+
+-(IBAction)onRemoteButtonTap:(id)sender{
+	[_snapshot_view removeFromSuperview];
+	_snapshot_view = nil;
+}
+
+
+
 
 - (void)didReceiveMemoryWarning {
 	[super didReceiveMemoryWarning];

@@ -39,14 +39,16 @@
 	if( isCapturing ){
 		return;
 	}
-	[_snapshot_view removeFromSuperview];
+//	[_snapshot_view removeFromSuperview];
 //	_snapshot_view = [_targetView resizableSnapshotViewFromRect:_targetFrame afterScreenUpdates:NO withCapInsets:UIEdgeInsetsZero];// afterScreenUpdatesをYESにするとglitchが発生するので注意
 	
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 		isCapturing = YES;
-		_snapshot_view = [_targetView snapshotViewAfterScreenUpdates:NO];
+		UIImage* img = [NNSnapshotView screenCapture:_targetView];
+//		_snapshot_view = [_targetView snapshotViewAfterScreenUpdates:NO];
 		dispatch_async(dispatch_get_main_queue(), ^{
-			[self addSubview:_snapshot_view];
+//			[self addSubview:_snapshot_view];
+			self.image = img;
 			isCapturing = NO;
 		});
 	});
@@ -55,8 +57,8 @@
 
 + (UIImage *)screenCapture:(UIView *)view {
 	UIImage *capture;
-	UIGraphicsBeginImageContextWithOptions(view.frame.size , NO , 1.0 );
-	[view drawViewHierarchyInRect:view.bounds afterScreenUpdates:YES];
+	UIGraphicsBeginImageContextWithOptions(view.frame.size , NO , 2 );
+	[view drawViewHierarchyInRect:view.bounds afterScreenUpdates:NO];
 	capture = UIGraphicsGetImageFromCurrentImageContext();
 	UIGraphicsEndImageContext();
 	return capture;

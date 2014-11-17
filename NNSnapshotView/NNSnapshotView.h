@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface NNSnapshotView : UIView
+@interface NNSnapshotView : UIImageView
 
 -(instancetype)initWithTargetView:(UIView*)targetView targetFrame:(CGRect)targetFrame;
 

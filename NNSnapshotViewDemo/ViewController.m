@@ -27,7 +27,7 @@
 	if( [segue.identifier isEqualToString:@"embed"] ){
 		UIViewController* vc = segue.destinationViewController;
 		NNSnapshotView* snapshot = [[NNSnapshotView alloc] initWithTargetView:vc.view targetFrame:CGRectMake(0, 0, 320, 200)];
-		snapshot.center = CGPointMake(10, 10);
+		snapshot.center = CGPointMake(50, 50);
 		[self.view addSubview:snapshot];
 		
 //		NNSnapshotView* snapshot2 = [[NNSnapshotView alloc] initWithTargetView:vc.view targetFrame:CGRectMake(0, 100, 320, 200)];

@@ -25,7 +25,7 @@
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
 	if( [segue.identifier isEqualToString:@"embed"] ){
 		UIViewController* vc = segue.destinationViewController;
-		_snapshot_view = [[NNSnapshotView alloc] initWithTargetView:vc.view targetFrame:CGRectMake(20, 20, 200, 200)];
+		_snapshot_view = [[NNSnapshotView alloc] initWithTargetView:vc.view targetFrame:CGRectMake(0, 400, 300, 200)];
 		[self.view addSubview:_snapshot_view];
 		
 //		NNSnapshotView* snapshot2 = [[NNSnapshotView alloc] initWithTargetView:vc.view targetFrame:CGRectMake(0, 100, 320, 200)];

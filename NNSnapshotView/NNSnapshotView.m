@@ -69,7 +69,8 @@
 	@try {
 		UIGraphicsBeginImageContextWithOptions(_targetFrame.size, NO, [UIScreen mainScreen].scale);
 		CGRect rect = _targetView.frame;
-		rect.origin = _targetFrame.origin;
+		rect.origin.x = 0 - _targetFrame.origin.x;
+		rect.origin.y = 0 - _targetFrame.origin.y;
 		[_targetView drawViewHierarchyInRect:rect afterScreenUpdates:NO];// afterScreenUpdatesをYESにするとglitchが発生するので注意
 		capture = UIGraphicsGetImageFromCurrentImageContext();
 	}

@@ -11,7 +11,7 @@
 @implementation NNSnapshotView{
 	__weak UIView* _targetView;
 	CGRect _targetFrame;
-	CADisplayLink* _displayLink;
+	__weak CADisplayLink* _displayLink;
 	BOOL isCapturing;
 }
 
@@ -24,15 +24,26 @@
 		_targetFrame = targetFrame;
 		_displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(update:)];
 		
-		// mode を NSRunLoopCommonModes にすると、スクロール中でもCADisplayLinkが動作します。
-		// http://stackoverflow.com/questions/12622800/why-does-uiscrollview-pause-my-cadisplaylink
-		[_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+
 	}
 	return self;
 }
 
+
+-(void)willMoveToSuperview:(UIView *)newSuperview{
+	if( !self.superview && newSuperview ){
+		// mode を NSRunLoopCommonModes にすると、スクロール中でもCADisplayLinkが動作します。
+		// http://stackoverflow.com/questions/12622800/why-does-uiscrollview-pause-my-cadisplaylink
+		[_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+	} else {
+		[_displayLink invalidate];
+	}
+}
+
+
+
 -(void)dealloc{
-	[_displayLink invalidate];
+	
 }
 
 
